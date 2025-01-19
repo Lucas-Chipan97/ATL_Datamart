@@ -1,0 +1,9 @@
+TRUNCATE TABLE snowflake.fact_tripdata RESTART IDENTITY;
+TRUNCATE TABLE snowflake.dim_amount RESTART IDENTITY;
+TRUNCATE TABLE snowflake.dim_time RESTART IDENTITY;
+TRUNCATE TABLE snowflake.dim_quarter RESTART IDENTITY;
+TRUNCATE TABLE snowflake.dim_month RESTART IDENTITY;
+TRUNCATE TABLE snowflake.dim_location RESTART IDENTITY;
+TRUNCATE TABLE snowflake.dim_payment_type RESTART IDENTITY;
+TRUNCATE TABLE snowflake.dim_ratecode RESTART IDENTITY;
+TRUNCATE TABLE snowflake.dim_vendor RESTART IDENTITY;
