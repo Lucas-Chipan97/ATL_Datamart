@@ -45,6 +45,11 @@ WHERE payment_description = 'Unknown Payment';
 
 -- Insertion des données de la table temporaire dans la table principale "dim_location".
 -- En cas de conflit sur la colonne "location_id" (clé primaire), les données existantes sont mises à jour.
+/*
+*
+*
+*
+*/
 INSERT INTO snowflake.dim_location (location_id, borough, zone, service_zone)
 SELECT location_id, borough, zone, service_zone
 FROM snowflake.location
