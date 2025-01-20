@@ -14,9 +14,9 @@ WHERE rate_code_description = 'Unknown Rate Code';
 -- Insertion de nouvelles données dans la table des timestamps (avec gestion des conflits)
 INSERT INTO snowflake.dim_time (date, year, month, day, hour, minute)
 VALUES
-    ('2024-12-10 18:39:00'),
-    ('2024-12-11 09:15:00'),
-    ('2024-12-12 16:45:00')
+    ('2024-12-10', 2024,12,10,14,30),
+    ('2024-12-11', 2024,12,11,9,15),
+    ('2024-12-12', 2024,12,12,16,45)
 ON CONFLICT (time_id) DO NOTHING;  -- Ignorer si l'enregistrement existe déjà
 
 -- Insertion de nouveaux fournisseurs (avec mise à jour en cas de conflit)
@@ -40,3 +40,30 @@ SET payment_description =
         ELSE 'Unknown Payment'  -- Par défaut, pour toute autre valeur inattendue
     END
 WHERE payment_description = 'Unknown Payment';
+
+
+-- Création d'une table temporaire nommée "temp_location" pour stocker les données importées du fichier CSV.
+drop table temp_location;
+CREATE TEMP TABLE temp_location (
+    location_id INT,
+    borough TEXT,
+    zone TEXT,
+    service_zone TEXT
+);
+
+-- Copie des données du fichier CSV "taxi_zone_lookup.csv" dans la table temporaire.
+COPY temp_location (location_id, borough, zone, service_zone)
+FROM './taxi_zone_lookup.csv'
+DELIMITER ',' CSV HEADER;
+
+
+-- Insertion des données de la table temporaire dans la table principale "dim_location".
+-- En cas de conflit sur la colonne "location_id" (clé primaire), les données existantes sont mises à jour.
+INSERT INTO dim_location (location_id, borough, zone, service_zone)
+SELECT location_id, borough, zone, service_zone
+FROM temp_location
+ON CONFLICT (location_id) DO UPDATE
+SET
+    borough = EXCLUDED.borough,
+    zone = EXCLUDED.zone,
+    service_zone = EXCLUDED.service_zone;
