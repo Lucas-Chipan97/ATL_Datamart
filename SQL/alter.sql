@@ -42,26 +42,12 @@ SET payment_description =
 WHERE payment_description = 'Unknown Payment';
 
 
--- Création d'une table temporaire nommée "temp_location" pour stocker les données importées du fichier CSV.
-drop table temp_location;
-CREATE TEMP TABLE temp_location (
-    location_id INT,
-    borough TEXT,
-    zone TEXT,
-    service_zone TEXT
-);
-
--- Copie des données du fichier CSV "taxi_zone_lookup.csv" dans la table temporaire.
-COPY temp_location (location_id, borough, zone, service_zone)
-FROM './taxi_zone_lookup.csv'
-DELIMITER ',' CSV HEADER;
-
 
 -- Insertion des données de la table temporaire dans la table principale "dim_location".
 -- En cas de conflit sur la colonne "location_id" (clé primaire), les données existantes sont mises à jour.
-INSERT INTO dim_location (location_id, borough, zone, service_zone)
+INSERT INTO snowflake.dim_location (location_id, borough, zone, service_zone)
 SELECT location_id, borough, zone, service_zone
-FROM temp_location
+FROM snowflake.location
 ON CONFLICT (location_id) DO UPDATE
 SET
     borough = EXCLUDED.borough,

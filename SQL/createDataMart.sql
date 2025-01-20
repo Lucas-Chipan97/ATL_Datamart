@@ -20,13 +20,13 @@ CREATE TABLE snowflake.dim_location (
     zone TEXT,
     latitude FLOAT,
     longitude FLOAT
-); /*charger fichier csv*/
+); 
 
 -- Dimension : Payment Type
 CREATE TABLE snowflake.dim_payment (
     payment_type_id INT PRIMARY KEY,
     payment_description TEXT
-); /*faire à la main */
+); 
 
 -- Dimension : Time
 CREATE TABLE snowflake.dim_time (
@@ -60,4 +60,4 @@ CREATE TABLE snowflake.rides_fact (
     pickup_location_id INT REFERENCES snowflake.dim_location(location_id),
     dropoff_location_id INT REFERENCES snowflake.dim_location(location_id),
     payment_type_id INT REFERENCES snowflake.dim_payment(payment_type_id)
-); /*faire a la main */
+); 
