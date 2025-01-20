@@ -1,0 +1,6 @@
+checks for nyc_raw:
+  - schema:
+      warn:
+        when required column missing: [extra]
+      fail:
+        when forbidden column present: [id, mta_tax]

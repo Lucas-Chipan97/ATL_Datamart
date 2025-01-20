@@ -1,0 +1,10 @@
+# local package
+-e .
+
+# external requirements
+soda-core-postgres
+soda-core-scientific
+pandas
+pendulum
+sqlalchemy
+tqdm
